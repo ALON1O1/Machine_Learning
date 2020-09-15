@@ -6,13 +6,15 @@ using namespace std;
 class Dataset {
 
 	private:
-		vector<float*> inputs = vector<float*>();
-		vector<float*> results = vector<float*>();
-		int length = 0;
+		vector<float*> inputs;
+		vector<float*> results;
+		int length;
 
 	public:
 		Dataset() {
-			
+			inputs = vector<float*>();
+			results = vector<float*>();
+			length = 0;
 		}
 		int getLength() {
 			return length;
