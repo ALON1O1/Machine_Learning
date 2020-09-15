@@ -99,8 +99,8 @@ int main() {
 				cout << 23 << endl;
 			}
 		}
-		catch (int e) {
-			cout << "EXCEPTION!!! " << e << endl;
+		catch (exception& e) {
+			cout << "EXCEPTION!!! " << e.what() << endl;
 		}
 	}
 }

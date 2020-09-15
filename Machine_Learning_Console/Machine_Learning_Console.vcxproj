@@ -20,6 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console\Console.cpp" />
+    <ClCompile Include="Console\Dataset.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Console\Dataset.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
