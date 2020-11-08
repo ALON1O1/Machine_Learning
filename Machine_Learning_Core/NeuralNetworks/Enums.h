@@ -1,6 +1,6 @@
 #pragma once
 namespace NeuralNetwork {
-	enum ActivationFunction { identity, sigmoid, softmax };
-	enum LayerType { ANN };
-	enum LossFunction { quadratic };
+	enum class ActivationFunction {identity, sigmoid, softmax};
+	enum class LayerType {ANN};
+	enum class LossFunction {quadratic};
 }

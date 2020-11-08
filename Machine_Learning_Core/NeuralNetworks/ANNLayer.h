@@ -1,15 +1,17 @@
 #pragma once
 #include "Layer.h"
+
 namespace NeuralNetwork {
 	class ANNLayer: Layer
 	{
 		private:
+			ActivationFunction function;
 			std::vector<std::vector<float>> weights;
 			std::vector<float> biases;
 
 			float deriveLoss(float err, LossFunction function);
-			void activate(std::vector<float> values, std::vector<float>& return_values);
-			void derive(std::vector<float> values, std::vector<float>& return_values);
+			bool activate(std::vector<float> values, std::vector<float>& return_values);
+			bool derive(std::vector<float> values, std::vector<float>& return_values);
 
 		public:
 			ANNLayer(int num_of_inputs, int size, ActivationFunction function);
