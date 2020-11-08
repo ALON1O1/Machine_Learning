@@ -5,6 +5,7 @@
 
 #include "DatasetList.h"
 #include "Dataset.h"
+#include "NeuralNetworks/NeuralNetwork.h"
 
 using namespace std;
 
@@ -194,7 +195,7 @@ int main() {
 				cout << "dataset list is now empty" << endl;
 			}
 			else if (command[0]._Equal("show_network")) {
-				cout << 10 << endl;
+				
 			}
 			else if (command[0]._Equal("remove_network")) {
 				cout << 11 << endl;

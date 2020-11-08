@@ -33,10 +33,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\datasets\mnist_10.csv" />
-    <None Include="resources\datasets\mnist_100.csv" />
-    <None Include="resources\datasets\mnist_10000.csv" />
-    <None Include="resources\datasets\mnist_60000.csv" />
-  </ItemGroup>
 </Project>
