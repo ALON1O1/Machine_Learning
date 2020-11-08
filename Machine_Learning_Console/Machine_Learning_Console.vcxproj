@@ -21,9 +21,17 @@
   <ItemGroup>
     <ClCompile Include="Console\Console.cpp" />
     <ClCompile Include="Console\Dataset.cpp" />
+    <ClCompile Include="Console\DatasetList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console\Dataset.h" />
+    <ClInclude Include="Console\DatasetList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\datasets\mnist_10.csv" />
+    <None Include="resources\datasets\mnist_100.csv" />
+    <None Include="resources\datasets\mnist_10000.csv" />
+    <None Include="resources\datasets\mnist_60000.csv" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

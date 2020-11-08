@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 
+#include "DatasetList.h"
+#include "Dataset.h"
+
 using namespace std;
 
 vector<string> receiveCommand(const char* msg) {
@@ -23,6 +26,7 @@ int main() {
 	enum commands {create};
 	string networks_path = "resources\\networks\\";
 	string dataset_path = "resources\\datasets\\";
+	DatasetList datasets = DatasetList();
 
 	bool shouldContinue = true;
 	while (shouldContinue) {
@@ -30,31 +34,164 @@ int main() {
 			vector<string> command = receiveCommand(">");
 			if (command[0]._Equal("quit")) shouldContinue = false;
 			else if (command[0]._Equal("show_dataset")) {
-				cout << 1 << endl;
+				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"show_dataset\" is 'show_dataset <dataset name>'" << endl;
+				else {
+					Dataset dataset = Dataset();
+					if (datasets.getDataset(command[1], dataset)) {
+						vector<string> strings = vector<string>();
+						dataset.getSaveString(strings);
+						cout << strings.size() << endl;
+						for (string i : strings) {
+							cout << i << endl;
+						}
+					}
+					else {
+						cout << "dataset '" + command[1] + "' could not be found" << endl;
+					}
+				}
 			}
 			else if(command[0]._Equal("remove_dataset")) {
-				cout << 2 << endl;
+				if (command.size() != 2) cout << "wrong syntax! correcto syntax for \"remove_dataset\" command is 'remove_dataset <dataset name>'" << endl;
+				else {
+					if (datasets.removeDataset(command[1]))cout << "dataset '" + command[1] + "' was successfully removed" << endl;
+					else cout << "dataset '" + command[1] + "' could not be found" << endl;
+				}
 			}
 			else if (command[0]._Equal("rename_dataset")) {
-				cout << 3 << endl;
+				if (command.size() != 3) cout << "wrong syntax! correct syntax for \"rename_dataset\" command is 'rename_dataset <dataset name>'" << endl;
+				else {
+					if (datasets.renameDataset(command[1], command[2])) cout << "dataset '" + command[1] + "' was successfully renamed to '" + command[2] + "'" << endl;
+					else cout << "dataset '" + command[1] + "' could not be found" << endl;
+				}
 			}
 			else if (command[0]._Equal("import_dataset")) {
-				cout << 4 << endl;
+				if (command.size() != 3) cout << "wrong syntax! correct syntax for \"import_dataset\" is 'import_dataset <filepath and name> <dataset name>'" << endl;
+				else {
+					ifstream datasetFile;
+					datasetFile.open(command[1] + ".csv", ios::in);
+					if (!datasetFile.good()) cout << "file \"" << command[1] << "\" could not be found" << endl;
+					else {
+						string line;
+						Dataset dataset;
+						while (getline(datasetFile, line)) {
+							vector<float> inputs;
+							vector<float> results;
+							int index = line.find(",", 0);
+							if (index == -1) index = line.length();
+							int inputs_num = stoi(line.substr(0, index));
+							line.erase(0, index + 1);
+							while (line.length() > 0 && inputs_num > 0) {
+								index = line.find(",", 0);
+								if (index == -1) index = line.length();
+								inputs.push_back(stof(line.substr(0, index)));
+								line.erase(0, index + 1);
+								inputs_num--;
+							}
+							index = line.find(",", 0);
+							if (index == -1) index = line.length();
+							int results_num = stoi(line.substr(0, index));
+							line.erase(0, index + 1);
+							while (line.length() > 0 && inputs_num > 0) {
+								index = line.find(",", 0);
+								if (index == -1) index = line.length();
+								results.push_back(stof(line.substr(0, index)));
+								line.erase(0, index + 1);
+								results_num--;
+							}
+							dataset.addData(inputs, results);
+						}
+						if (datasets.addDataset(dataset, command[2])) cout << "successfully imported dataset '" + command[2] + "'" << endl;
+						else cout << "dataset could not be added, there is already a dataset named '" + command[2] + "'" << endl;
+					}
+				}
 			}
 			else if (command[0]._Equal("export_dataset")) {
-				cout << 5 << endl;
+				if (command.size() != 3) cout << "wrong syntax! correct syntax for \"export_dataset\" command is 'export_dataset <path to export location> <dataset name>'" << endl;
+				else {
+					Dataset dataset;
+					if (!datasets.getDataset(command[2], dataset)) cout << "dataset '" + command[2] + "' could not be found" << endl;
+					else {
+						vector<string> strings;
+						dataset.getSaveString(strings);
+						ofstream datasetFile(command[1] + "\\" + command[2] + ".csv");
+						for (string i : strings) {
+							datasetFile << i << endl;
+						}
+						datasetFile.close();
+						cout << "dataset '" + command[2] + "' was saved successfully" << endl;
+					}
+				}
 			}
 			else if (command[0]._Equal("load_dataset")) {
-				cout << 6 << endl;
+				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"load_dataset\" is 'load_dataset <dataset name>" << endl;
+				else {
+					ifstream datasetFile;
+					datasetFile.open(dataset_path + command[1] + ".csv", ios::in);
+					if (!datasetFile.good()) cout << "file \"" << command[1] << "\" could not be found" << endl;
+					else {
+						string line;
+						Dataset dataset;
+						while (getline(datasetFile, line)) {
+							vector<float> inputs;
+							vector<float> results;
+							int index = line.find(",", 0);
+							if (index == -1) index = line.length();
+							int inputs_num = stoi(line.substr(0, index));
+							line.erase(0, index + 1);
+							while (line.length() > 0 && inputs_num > 0) {
+								index = line.find(",", 0);
+								if (index == -1) index = line.length();
+								inputs.push_back(stof(line.substr(0, index)));
+								line.erase(0, index + 1);
+								inputs_num--;
+							}
+							index = line.find(",", 0);
+							if (index == -1) index = line.length();
+							int results_num = stoi(line.substr(0, index));
+							line.erase(0, index + 1);
+							while (line.length() > 0 && inputs_num > 0) {
+								index = line.find(",", 0);
+								if (index == -1) index = line.length();
+								results.push_back(stof(line.substr(0, index)));
+								line.erase(0, index + 1);
+								results_num--;
+							}
+							dataset.addData(inputs, results);
+						}
+						if (datasets.addDataset(dataset, command[1])) cout << "successfully loaded dataset '" + command[1] + "'" << endl;
+						else cout << "dataset could not be added, there is already a dataset named '" + command[1] + "'" << endl;
+					}
+				}
 			}
 			else if (command[0]._Equal("save_dataset")) {
-				cout << 7 << endl;
+				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"save_dataset\" command is 'save_dataset <dataset name>'" << endl;
+				else {
+					Dataset dataset;
+					if (!datasets.getDataset(command[1], dataset)) cout << "dataset '" + command[1] + "' could not be found" << endl;
+					else {
+						vector<string> strings;
+						dataset.getSaveString(strings);
+						ofstream datasetFile(dataset_path + command[1] + ".csv");
+						for(string i : strings) {
+							datasetFile << i << endl;
+						}
+						datasetFile.close();
+						cout << "dataset '" + command[1] + "' was saved successfully" << endl;
+					}
+				}
+
 			}
 			else if (command[0]._Equal("show_dataset_list")) {
-				cout << 8 << endl;
+				vector<string> names;
+				datasets.getNames(names);
+				if (names.size() == 0) cout << "no datasets have been loaded" << endl;
+				else {
+					for (string i : names) cout << i << endl;
+				}
 			}
 			else if (command[0]._Equal("remove_all_datasets")) {
-				cout << 9 << endl;
+				datasets.removeAll();
+				cout << "dataset list is now empty" << endl;
 			}
 			else if (command[0]._Equal("show_network")) {
 				cout << 10 << endl;

@@ -1,59 +1,43 @@
-//#include "Dataset.h"
-#include <vector>
-#include <string>
+#include "Dataset.h"
+#include <iostream>
 
-using namespace std;
-class Dataset {
-
-	private:
-		vector<float*> inputs;
-		vector<float*> results;
-		int length;
-
-	public:
-		Dataset() {
-			inputs = vector<float*>();
-			results = vector<float*>();
-			length = 0;
-		}
-		int getLength() {
+Dataset::Dataset() {
+	inputs = std::vector<std::vector<float>>();
+	results = std::vector<std::vector<float>>();
+	length = 0;
+}
+Dataset::~Dataset() {}
+int Dataset::getLength() {
 			return length;
 		}
-		void addData(float inputs[], float results[]) {
+void Dataset::addData(std::vector<float> inputs, std::vector<float> results) {
 			this->inputs.push_back(inputs);
 			this->results.push_back(results);
+			length++;
 		}
-		float* getInputs(int index) {
-			static float* returnValue = inputs[index];
-			return returnValue;
+void Dataset::getData(int index, std::vector<float>& return_inputs, std::vector<float>& return_results) {
+			return_inputs = inputs[index];
+			return_results = results[index];
 		}
-		vector<float*> getAllInputs() {
-			return inputs;
+void Dataset::getAllData(std::vector<std::vector<float>>& return_inputs, std::vector<std::vector<float>>& return_results) {
+			return_inputs = inputs;
+			return_results = results;
 		}
-		vector<float*> getAllResults() {
-			return results;
-		}
-		float* getResults(int index) {
-			static float* returnValue = results[index];
-			return returnValue;
-		}
-		vector<string> getSaveString() {
-			vector<string> returnValues = vector<string>();
-			for (int i = 0; i < (int)(inputs.size()); i++) {
-				string s = inputs.size() + "";
-				for (int j = 0; j < sizeof(inputs[i]); j++) {
-					s += "," + to_string(inputs.at(i)[j]);
+void Dataset::getSaveString(std::vector<std::string>& saveString) {
+			for (int i = 0; i < inputs.size() ; i++) {
+				std::string s = std::to_string(inputs[i].size());
+				for (int j = 0; j < inputs[i].size(); j++) {
+					s += "," + std::to_string(inputs[i][j]);
 				}
-				s += "," + results.size();
-				for (int j = 0; j < sizeof(results[i]); j++) {
-					s += "," + to_string(inputs.at(i)[j]);
+				s += "," + std::to_string(results[i].size());
+				for (int j = 0; j < results[i].size(); j++) {
+					s += "," + std::to_string(inputs[i][j]);
 				}
-				returnValues.push_back(s);
+				saveString.push_back(s);
 			}
-			return returnValues;
 		}
-		void removeData(int index) {
-			inputs.erase(inputs.begin() + index);
-			results.erase(results.begin() + index);
-		}
-};
+void Dataset::removeData(int index) {
+		inputs.erase(inputs.begin() + index);
+		results.erase(results.begin() + index);
+		length--;
+	}
