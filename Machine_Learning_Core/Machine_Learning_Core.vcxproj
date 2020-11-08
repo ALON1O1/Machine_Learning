@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NeuralNetworks\ANNLayer.h" />
     <ClInclude Include="NeuralNetworks\Enums.h" />
     <ClInclude Include="NeuralNetworks\Layer.h" />
     <ClInclude Include="NeuralNetworks\NeuralNetwork.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="NeuralNetworks\ANNLayer.cpp" />
     <ClCompile Include="NeuralNetworks\Layer.cpp" />
     <ClCompile Include="NeuralNetworks\NeuralNetwork.cpp" />
   </ItemGroup>
