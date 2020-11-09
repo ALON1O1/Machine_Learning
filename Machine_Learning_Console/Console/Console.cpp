@@ -5,6 +5,7 @@
 
 #include "DatasetList.h"
 #include "Dataset.h"
+#include "NetworkList.h"
 #include "NeuralNetworks/NeuralNetwork.h"
 
 using namespace std;
@@ -28,6 +29,7 @@ int main() {
 	string networks_path = "resources\\networks\\";
 	string dataset_path = "resources\\datasets\\";
 	DatasetList datasets = DatasetList();
+	NetworkList networks = NetworkList();
 
 	bool shouldContinue = true;
 	while (shouldContinue) {
@@ -195,13 +197,24 @@ int main() {
 				cout << "dataset list is now empty" << endl;
 			}
 			else if (command[0]._Equal("show_network")) {
-				
+				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"show_network\" command is 'show_network <network name>'" << endl;
+				else {
+				cout << networks.getNetwork(command[1]).toString() << endl;
+				}
 			}
 			else if (command[0]._Equal("remove_network")) {
-				cout << 11 << endl;
+				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"remove_network\" command is 'remove_network <network name>'" << endl;
+				else {
+					if (networks.removeNetwork(command[1])) cout << "network '" + command[1] + "' was successfully removed" << endl;
+					else cout << "could not find network '" + command[1] + "'" << endl;
+				}
 			}
 			else if (command[0]._Equal("rename_network")) {
-				cout << 12 << endl;
+				if (command.size() != 3) cout << "wrong syntax! correct syntax for \"rename_network\" command is 'remove_network <old network name> <new network name>'" << endl;
+				else {
+					if (networks.renameNetwork(command[1], command[2])) cout << "network '" + command[1] + "' was successfully renamed to '" + command[2] + "'" << endl;
+					else cout << "could not find network '" + command[1] + "'" << endl;
+				}
 			}
 			else if (command[0]._Equal("import_network")) {
 				cout << 13 << endl;
