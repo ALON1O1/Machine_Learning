@@ -229,10 +229,13 @@ int main() {
 				cout << 16 << endl;
 			}
 			else if (command[0]._Equal("show_network_list")) {
-				cout << 17 << endl;
+				vector<string> names = networks.getAllNames();
+				if (names.size() == 0) cout << "no networks have been loaded" << endl;
+				else for (string s : names) cout << s << endl;
 			}
 			else if (command[0]._Equal("remove_all_networks")) {
-				cout << 18 << endl;
+				networks.removeAll();
+				cout << "networks list is now enpty" << endl;
 			}
 			else if (command[0]._Equal("create")) {
 				cout << 19 << endl;
