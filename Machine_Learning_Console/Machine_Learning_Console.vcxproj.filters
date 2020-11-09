@@ -24,12 +24,18 @@
     <ClCompile Include="Console\DatasetList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Console\NetworkList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console\Dataset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Console\DatasetList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\NetworkList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

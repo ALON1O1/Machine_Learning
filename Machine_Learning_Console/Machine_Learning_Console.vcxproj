@@ -22,10 +22,12 @@
     <ClCompile Include="Console\Console.cpp" />
     <ClCompile Include="Console\Dataset.cpp" />
     <ClCompile Include="Console\DatasetList.cpp" />
+    <ClCompile Include="Console\NetworkList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console\Dataset.h" />
     <ClInclude Include="Console\DatasetList.h" />
+    <ClInclude Include="Console\NetworkList.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Machine_Learning_Core\Machine_Learning_Core.vcxproj">
