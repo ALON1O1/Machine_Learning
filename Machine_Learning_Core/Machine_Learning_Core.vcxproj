@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="Math\Matrix.cpp" />
     <ClCompile Include="NeuralNetworks\ANNLayer.cpp" />
+    <ClCompile Include="NeuralNetworks\Enums.cpp" />
     <ClCompile Include="NeuralNetworks\Layer.cpp" />
     <ClCompile Include="NeuralNetworks\NeuralNetwork.cpp" />
     <ClCompile Include="Math\Vector.cpp" />

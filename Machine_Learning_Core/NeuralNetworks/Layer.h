@@ -14,9 +14,8 @@ namespace NeuralNetwork {
 			int num_of_outputs;
 		public:
 			static Layer* createLayer(std::string s);
-			void addLayer(int size[], ActivationFunction function, LayerType type);
+			void addLayer(int size, ActivationFunction function, LayerType type);
 			void addLayer(std::string s);
-			std::string functionName();
 			virtual float* feedForward(float* inputs) = 0;
 			virtual float* backPropagate(float* inputs, float* target_results, LossFunction loss_function, float rate_of_change) = 0;
 			virtual float** stochasticBackPropagation(float** inputs, float** target_results, LossFunction loss_function, float rate_of_change) = 0;

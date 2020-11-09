@@ -12,7 +12,7 @@ namespace Math {
 			static float** Mul(float** mat, float num);
 			static float** MulCross(float** mat1, float** mat2);
 			static float** MulDot(float** mat1, float** mat2);
-			static static float* MulDot(float** mat, float* vec);
+			static float* MulDot(float** mat, float* vec);
 			static float** Transpose(float** mat);
 			static float** Div(float** mat, float num);
 			static float** Div(float** mat1, float** mat2);

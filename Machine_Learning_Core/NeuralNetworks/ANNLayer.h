@@ -2,7 +2,7 @@
 #include "Layer.h"
 
 namespace NeuralNetwork {
-	class ANNLayer: Layer
+	class ANNLayer: public Layer
 	{
 		private:
 			ActivationFunction function;

@@ -30,6 +30,9 @@
     <ClCompile Include="Math\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NeuralNetworks\Enums.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NeuralNetworks\NeuralNetwork.h">

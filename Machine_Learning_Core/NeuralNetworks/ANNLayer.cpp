@@ -154,7 +154,7 @@ namespace NeuralNetwork {
 	}
 
 	std::string ANNLayer::toString() {
-		std::string s = "Layer Type: ANN\nActivation Function: " + functionName(); +"\n";
+		std::string s = "Layer Type: ANN\nActivation Function: " + enumOperations::getName(function) +"\n";
 		for (int i = 0; i < sizeof(weights); i++) {
 			s += "neuron number:" + std::to_string(i) + "\nbias:" + std::to_string(biases[i]) + "\n";
 			for (int j = 0; j < sizeof(weights[j]); j++) {
@@ -166,12 +166,13 @@ namespace NeuralNetwork {
 		return s;
 	}
 	std::string ANNLayer::saveString() {
-		std::string s = "ANN," + functionName() + "," + std::to_string(sizeof(weights));
+		std::string s = "ANN," + enumOperations::getName(function) + "," + std::to_string(sizeof(weights));
 		for (int i = 0; i < sizeof(weights); i++) {
 			s += "," + std::to_string(biases[i]) + "," + std::to_string(sizeof(weights[i]));
 			for (int j = 0; j < sizeof(weights[i]); j++) {
 				s += "," + std::to_string(weights[i][j]);
 			}
 		}
+		return s;
 	}
 }
