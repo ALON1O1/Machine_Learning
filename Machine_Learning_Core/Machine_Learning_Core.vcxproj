@@ -19,15 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="NeuralNetworks\ANNLayer.h" />
     <ClInclude Include="NeuralNetworks\Enums.h" />
     <ClInclude Include="NeuralNetworks\Layer.h" />
     <ClInclude Include="NeuralNetworks\NeuralNetwork.h" />
+    <ClInclude Include="Math\Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Math\Matrix.cpp" />
     <ClCompile Include="NeuralNetworks\ANNLayer.cpp" />
     <ClCompile Include="NeuralNetworks\Layer.cpp" />
     <ClCompile Include="NeuralNetworks\NeuralNetwork.cpp" />
+    <ClCompile Include="Math\Vector.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

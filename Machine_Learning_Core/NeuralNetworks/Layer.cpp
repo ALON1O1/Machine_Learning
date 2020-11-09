@@ -2,7 +2,7 @@
 
 namespace NeuralNetwork {
 	Layer* Layer::createLayer(std::string s) {
-
+		return NULL;
 	}
 	void Layer::addLayer(int size[], ActivationFunction function, LayerType type) {
 

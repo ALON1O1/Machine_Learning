@@ -10,8 +10,8 @@ namespace NeuralNetwork {
 			std::vector<float> biases;
 
 			float deriveLoss(float err, LossFunction function);
-			bool activate(std::vector<float> values, std::vector<float>& return_values);
-			bool derive(std::vector<float> values, std::vector<float>& return_values);
+			float* activate(float* values);
+			float* derive(float* values);
 
 		public:
 			ANNLayer(int num_of_inputs, int size, ActivationFunction function);

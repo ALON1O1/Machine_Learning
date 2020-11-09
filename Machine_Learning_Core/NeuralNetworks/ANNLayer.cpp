@@ -1,52 +1,67 @@
 #define _USE_MATH_DEFINES
 #include "ANNLayer.h"
 #include <math.h>
+#include <stdexcept>
 
 namespace NeuralNetwork {
+
 	float ANNLayer::deriveLoss(float err, LossFunction function) {
 		switch (function) {
 			case LossFunction::quadratic: return err * 2;
 			default: return 0;
 		}
 	}
-	bool ANNLayer::activate(std::vector<float> values, std::vector<float>& return_values) {
+	float* ANNLayer::activate(float* values) {
 		switch (function) {
-			case ActivationFunction::identity: return_values = values; return true;
-			case ActivationFunction::sigmoid:
-				for (float v : values) {
-					return_values.push_back(1 / (1 + pow(M_E, -v)));
+			case ActivationFunction::identity: return values;
+			case ActivationFunction::sigmoid: {
+				const int size = sizeof(values);
+				static float return_values[size];
+				for (int i = 0; i < size; i++) {
+					return_values[i] = 1 / (1 + powf(M_E, -values[i]));
 				}
-				return true;
-			case ActivationFunction::softmax:
+				return return_values;
+				
+			}
+			case ActivationFunction::softmax: {
+				const int size = sizeof(values);
+				static float return_values[size];
 				float counter = 0;
-				for (int i = 0; i < values.size(); i++) {
-					return_values.push_back(pow(M_E, values[i]));
+				for (int i = 0; i < size; i++) {
+					return_values[i] = powf(M_E, values[i]);
 					counter += return_values[i];
 				}
-				for (int i = 0; i < return_values.size(); i++) {
+				for (int i = 0; i < size; i++) {
 					return_values[i] /= counter;
 				}
-				return true;
-			default: return false;
+				return return_values;
+			}
+			default: return NULL;
 		}	
 	}
-	bool ANNLayer::derive(std::vector<float> values, std::vector<float>& return_values) {
+	float* ANNLayer::derive(float* values) {
+		const int size = sizeof(values);
+		static float return_values[size];
 		switch (function) {
-			case ActivationFunction::identity: for (float v : values) return_values.push_back(1); return true;
+			case ActivationFunction::identity: for (int i = 0; i < size; i++) return_values[i] = 1; return return_values;
 			case ActivationFunction::sigmoid:
-				for (float v : values) {
-					float sigmoid = 1 / (1 + pow(M_E, -v));
-					return_values.push_back(sigmoid * (1 - sigmoid));
+				for (int i = 0; i < size; i++) {
+					float sigmoid = 1 / (1 + powf(M_E, values[i]));
+					return_values[i] = sigmoid * (1 - sigmoid);
 				}
-				return true;
+				return return_values;
 			case ActivationFunction::softmax:
-				activate(values, return_values);
-				for (int i = 0; i < return_values.size(); i++) {
-					return_values[i] = return_values[i] * (1 - return_values[i]);
+				float* temp = activate(values);
+				for (int i = 0; i < size; i++) {
+					return_values[i] = temp[i] * (1 - temp[i]);
 				}
-				return true;
-			default: return false;
+				return return_values;
+			default: return NULL;
 		}
 	}
 
+	/*void ANNLayer::feedForward(std::vector<float> inputs, std::vector<float>& results) {
+		if (inputs.size() != weights[0].size()) throw std::invalid_argument("Number of given inputs must be the same as the number of required inputs. Given inputs:" + std::to_string(inputs.size()) + " Required inputs:" + std::to_string(weights[0].size()));
+		if ()
+	}*/
 }
