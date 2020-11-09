@@ -10,4 +10,12 @@ namespace NeuralNetwork {
 	void Layer::addLayer(std::string s) {
 
 	}
+	std::string Layer::functionName() {
+		switch (function) {
+			case ActivationFunction::identity: return "identity";
+			case ActivationFunction::sigmoid: return "sigmoid";
+			case ActivationFunction::softmax: return "softmax";
+			default: return "unknown";
+		}
+	}
 }
