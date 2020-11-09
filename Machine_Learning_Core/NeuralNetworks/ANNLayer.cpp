@@ -50,12 +50,13 @@ namespace NeuralNetwork {
 					return_values[i] = sigmoid * (1 - sigmoid);
 				}
 				return return_values;
-			case ActivationFunction::softmax:
+			case ActivationFunction::softmax: {
 				float* temp = activate(values);
 				for (int i = 0; i < size; i++) {
 					return_values[i] = temp[i] * (1 - temp[i]);
 				}
 				return return_values;
+			}
 			default: return NULL;
 		}
 	}

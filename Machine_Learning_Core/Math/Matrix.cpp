@@ -15,7 +15,7 @@ namespace Math {
 	float** Matrix::Add(float** mat1, float** mat2) {
 		static float** new_mat = new float* [sizeof(mat1)];
 		for (int i = 0; i < sizeof(mat1); i++) {
-			new_mat[i] = new float[sizeof(mat[i])];
+			new_mat[i] = new float[sizeof(mat1[i])];
 			for (int j = 0; j < sizeof(mat1[i]); i++) {
 				new_mat[i][j] = mat1[i][j] + mat2[i][j];
 			}
@@ -35,7 +35,7 @@ namespace Math {
 	float** Matrix::Sub(float** mat1, float** mat2) {
 		static float** new_mat = new float* [sizeof(mat1)];
 		for (int i = 0; i < sizeof(mat1); i++) {
-			new_mat[i] = new float[sizeof(mat[i])];
+			new_mat[i] = new float[sizeof(mat1[i])];
 			for (int j = 0; j < sizeof(mat1[i]); i++) {
 				new_mat[i][j] = mat1[i][j] - mat2[i][j];
 			}
@@ -55,7 +55,7 @@ namespace Math {
 	float** Matrix::MulCross(float** mat1, float** mat2) {
 		static float** new_mat = new float* [sizeof(mat1)];
 		for (int i = 0; i < sizeof(mat1); i++) {
-			new_mat[i] = new float[sizeof(mat[i])];
+			new_mat[i] = new float[sizeof(mat1[i])];
 			for (int j = 0; j < sizeof(mat1[i]); i++) {
 				new_mat[i][j] = mat1[i][j] + mat2[i][j];
 			}
