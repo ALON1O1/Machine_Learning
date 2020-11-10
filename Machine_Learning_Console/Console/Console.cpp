@@ -233,7 +233,12 @@ int main() {
 				}
 			}
 			else if (command[0]._Equal("export_network")) {
-				cout << 14 << endl;
+				if (command.size() != 3) cout << "wrong syntax! correct syntax for \"export_network\" command is 'export_network <save path> <network name>" << endl;
+				string s = networks.getNetwork(command[2]).getSaveString();
+				ofstream networkFile(command[1] + "\\" + command[2] + ".csv");
+				networkFile << s << endl;
+				networkFile.close();
+				cout << "network '" + command[2] + "' was saved successfully" << endl;
 			}
 			else if (command[0]._Equal("load_network")) {
 				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"load_network\" is 'load_network <network name>" << endl;
