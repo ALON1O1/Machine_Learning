@@ -30,6 +30,7 @@ namespace NeuralNetwork {
 		num_of_inputs = weights[0].size();
 		for (int i = 0; i < num_of_outputs; i++) {
 			this->weights[i] = new float[weights[i].size()];
+			this->biases[i] = biases[i];
 			for (int j = 0; j < num_of_inputs; j++) {
 				this->weights[i][j] = weights[i][j];
 			}
@@ -189,6 +190,7 @@ namespace NeuralNetwork {
 				s += "," + std::to_string(weights[i][j]);
 			}
 		}
+		if (next != NULL) s += "\n" + next->saveString();
 		return s;
 	}
 }

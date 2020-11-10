@@ -252,7 +252,12 @@ int main() {
 				}
 			}
 			else if (command[0]._Equal("save_network")) {
-				cout << 16 << endl;
+				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"save_network\" command is 'save_network <network name>" << endl;
+				string s = networks.getNetwork(command[1]).getSaveString();
+				ofstream networkFile(networks_path + command[1] + ".csv");
+				networkFile << s << endl;
+				networkFile.close();
+				cout << "network '" + command[1] + "' was saved successfully" << endl;
 			}
 			else if (command[0]._Equal("show_network_list")) {
 				vector<string> names = networks.getAllNames();
