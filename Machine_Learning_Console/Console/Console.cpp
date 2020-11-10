@@ -217,7 +217,20 @@ int main() {
 				}
 			}
 			else if (command[0]._Equal("import_network")) {
-				cout << 13 << endl;
+				if (command.size() != 3) cout << "wrong syntax! correct syntax for \"import_network\" is 'import_network <file address and name> <network name>" << endl;
+				else {
+					ifstream networkFile;
+					networkFile.open(command[1] + ".csv", ios::in);
+					if (!networkFile.good()) cout << "network \"" << command[2] << "\" could not be found" << endl;
+					else {
+						string network_string;
+						string line;
+						getline(networkFile, network_string);
+						while (getline(networkFile, line)) network_string += "\n" + line;
+						if (networks.addNetwork(NeuralNetwork::NeuralNetwork(network_string), command[2])) cout << "network '" + command[2] + "' was successfully loaded" << endl;
+						else cout << "network could not be added, there is already a network named '" + command[2] + "'" << endl;
+					}
+				}
 			}
 			else if (command[0]._Equal("export_network")) {
 				cout << 14 << endl;
