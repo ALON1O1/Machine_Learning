@@ -6,6 +6,7 @@
 #include "DatasetList.h"
 #include "Dataset.h"
 #include "NetworkList.h"
+#include "NeuralNetworks/Enums.h"
 #include "NeuralNetworks/NeuralNetwork.h"
 
 using namespace std;
@@ -274,7 +275,148 @@ int main() {
 				cout << "networks list is now enpty" << endl;
 			}
 			else if (command[0]._Equal("create")) {
-				cout << 19 << endl;
+				bool cancel = false;
+				string network_name = "";
+				int inputs_num = 0;
+				vector<NeuralNetwork::LayerType> layer_types;
+				vector<NeuralNetwork::ActivationFunction> activation_functions;
+				vector<int> sizes;
+				NeuralNetwork::LossFunction loss_function = NeuralNetwork::LossFunction::unknown;
+				while (!cancel) {
+					vector<string> create_command = receiveCommand(">create>");
+					if (create_command[0]._Equal("cancel")) cancel = true;
+					else if (create_command[0]._Equal("name")) {
+						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create name\" command is 'name <network name>" << endl;
+						else if (networks.networkExists(create_command[1])) cout << "a network with the name '" + create_command[1] + "' has already been loaded, please choose another name" << endl;
+						else network_name = create_command[1];
+					}
+					else if (create_command[0]._Equal("number_of_inputs")) {
+						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create number_of_inputs\" command is 'number_of_inputs <inputs number>" << endl;
+						else {
+							int temp = std::stoi(create_command[1]);
+							if (temp <= 0) cout << "number of inputs must be a positive integer" << endl;
+							else inputs_num = temp;
+						}
+					}
+					else if (create_command[0]._Equal("show_layer_data")) {
+						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create show_layer_data\" is 'show_layer_data <layer index>" << endl;
+						else {
+							int index = std::stoi(create_command[1]);
+							if (index < 0 || index >= sizes.size()) cout << "index must not be negative and must be smaller than the current number of layers" << endl;
+							else {
+								cout << "Layer Type: " + NeuralNetwork::enumOperations::getName(layer_types[index]) << endl;
+								cout << "Activation Function: " + NeuralNetwork::enumOperations::getName(activation_functions[index]) << endl;
+								cout << "number of perceptrons: " + std::to_string(sizes[index]) << endl;
+							}
+						}
+					}
+					else if (create_command[0]._Equal("show_data")) {
+						cout << "name:" + network_name << endl;
+						cout << "number of inputs:" + std::to_string(inputs_num) << endl;
+						cout << "loss function:" + NeuralNetwork::enumOperations::getName(loss_function) << endl;
+					}
+					else if (create_command[0]._Equal("remove_layer")) {
+						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create remove_layer\" command is 'remove_layer <layer index>'" << endl;
+						int index = std::stoi(create_command[1]);
+						if (index < 0 || index >= sizes.size()) cout << "index must not be negative and must be smaller than the current number of layers" << endl;
+						else {
+							sizes.erase(sizes.begin() + index);
+							layer_types.erase(layer_types.begin() + index);
+							activation_functions.erase(activation_functions.begin() + index);
+						}
+					}
+					else if (create_command[0]._Equal("loss_function")) {
+						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create loss_function\" command is 'loss_function <function name>'" << endl;
+						else {
+							loss_function = NeuralNetwork::enumOperations::getLossFunction(create_command[1]);
+						}
+					}
+					else if (create_command[0]._Equal("finish")) {
+						if (network_name.empty() || inputs_num == 0 || sizes.size() == 0 || loss_function == NeuralNetwork::LossFunction::unknown) cout << "please set all parameters before finishing" << endl;
+						else cancel = networks.addNetwork(NeuralNetwork::NeuralNetwork(sizes, layer_types, activation_functions, inputs_num, loss_function), network_name);
+					}
+					else if (create_command[0]._Equal("add_layer")) {
+						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create add_layer\" command is 'add_layer <layer type>'" << endl;
+						else {
+							switch (NeuralNetwork::enumOperations::getLayerType(create_command[1]))
+							{
+								case NeuralNetwork::LayerType::ANN: {
+									bool innerCancel = false;
+									int size = 0;
+									NeuralNetwork::ActivationFunction aFunction = NeuralNetwork::ActivationFunction::unknown;
+									while (!innerCancel) {
+										vector<string> ann_command = receiveCommand(">create>add_layer_ANN>");
+										if (ann_command[0]._Equal("cancel")) innerCancel = true;
+										else if (ann_command[0]._Equal("size")) {
+											if (ann_command.size() != 2) cout << "wrong syntax! correct syntax for \"create add_layer_ann size\" command is 'size <number of perceptrons>" << endl;
+											else size = std::stoi(ann_command[1]);
+										}
+										else if (ann_command[0]._Equal("activation_function")) {
+											if (ann_command.size() != 2) cout << "wrong syntax! correct syntax for \"create add_layer_ann activation_function\" command is 'activation_function <function name>" << endl;
+											else aFunction = NeuralNetwork::enumOperations::getActivationFunction(ann_command[1]);
+										}
+										else if (ann_command[0]._Equal("finish")) {
+											if (size == 0 || aFunction == NeuralNetwork::ActivationFunction::unknown) cout << "please enter all the parameters before finishing" << endl;
+											else {
+												sizes.push_back(size);
+												activation_functions.push_back(aFunction);
+												layer_types.push_back(NeuralNetwork::LayerType::ANN);
+												innerCancel = true;
+											}
+										}
+										else cout << command[0] + " is not a recognized command" << endl;
+									}
+								}
+							default:
+								break;
+							}
+						}
+					}
+					else if (create_command[0]._Equal("edit_layer")) {
+						if (create_command.size() != 3) cout << "wrong syntax! correct syntax for \"create edit_layer\" command is 'edit_layer <layer index> <new layer type>'" << endl;
+						else {
+							int index = std::stoi(create_command[1]);
+							if (index < 0 || index >= sizes.size())  cout << "index must not be negative and must be smaller than the current number of layers" << endl;
+							else {
+								switch (NeuralNetwork::enumOperations::getLayerType(create_command[2]))
+								{
+									case NeuralNetwork::LayerType::ANN: {
+										bool innerCancel = false;
+										int size = sizes[index];
+										NeuralNetwork::ActivationFunction aFunction = activation_functions[index];
+										while (!innerCancel) {
+											vector<string> ann_command = receiveCommand(">create>add_layer_ANN>");
+											if (ann_command[0]._Equal("cancel")) innerCancel = true;
+											else if (ann_command[0]._Equal("size")) {
+												if (ann_command.size() != 2) cout << "wrong syntax! correct syntax for \"create add_layer_ann size\" command is 'size <number of perceptrons>" << endl;
+												else size = std::stoi(ann_command[1]);
+											}
+											else if (ann_command[0]._Equal("activation_function")) {
+												if (ann_command.size() != 2) cout << "wrong syntax! correct syntax for \"create add_layer_ann activation_function\" command is 'activation_function <function name>" << endl;
+												else aFunction = NeuralNetwork::enumOperations::getActivationFunction(ann_command[1]);
+											}
+											else if (ann_command[0]._Equal("finish")) {
+												if (size == 0 || aFunction == NeuralNetwork::ActivationFunction::unknown) cout << "please enter all the parameters before finishing" << endl;
+												else {
+													sizes[index] = size;
+													activation_functions[index] = aFunction;
+													layer_types[index] = NeuralNetwork::LayerType::ANN;
+													innerCancel = true;
+												}
+											}
+											else cout << ann_command[0] + " is not a recognized command" << endl;
+										}
+									}
+									default:
+										break;
+								}
+							}
+						}
+					}
+					else {
+						cout << create_command[0] + " is not a recognized command" << endl;
+					}
+				}
 			}
 			else if (command[0]._Equal("test_network")) {
 				cout << 20 << endl;

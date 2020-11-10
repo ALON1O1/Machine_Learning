@@ -10,7 +10,7 @@ namespace NeuralNetwork {
 			LossFunction function;
 			static std::string split(std::string& string, std::string token);
 		public:
-			NeuralNetwork(int* layers, LayerType* layer_types, ActivationFunction* activation_functions, int num_of_inputs, LossFunction loss_function);
+			NeuralNetwork(std::vector<int> layers, std::vector<LayerType> layer_types, std::vector<ActivationFunction> activation_functions, int num_of_inputs, LossFunction loss_function);
 			NeuralNetwork(std::string s);
 			float* feedForward(float* inputs);
 			void backPropagation(float* inputs, float* target_results, float rate_of_change);

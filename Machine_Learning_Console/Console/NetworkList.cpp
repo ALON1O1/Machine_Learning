@@ -27,6 +27,10 @@ void NetworkList::removeAll() {
 	length = 0;
 }
 
+bool NetworkList::networkExists(std::string name) {
+	return getNetworkIndex(name) != -1;
+}
+
 NeuralNetwork::NeuralNetwork NetworkList::getNetwork(std::string name) {
 	return networks[getNetworkIndex(name)];
 }

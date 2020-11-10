@@ -3,9 +3,9 @@
 #include <string>
 
 namespace NeuralNetwork {
-	enum class ActivationFunction {identity, sigmoid, softmax};
-	enum class LayerType {ANN};
-	enum class LossFunction {quadratic};
+	enum class ActivationFunction {identity, sigmoid, softmax, unknown};
+	enum class LayerType {ANN, unknown};
+	enum class LossFunction {quadratic, unknown};
 
 	class enumOperations {
 		public:

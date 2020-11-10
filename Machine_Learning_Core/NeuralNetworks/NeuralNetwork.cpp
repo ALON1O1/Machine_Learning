@@ -5,14 +5,14 @@
 #include <iostream>
 
 namespace NeuralNetwork {
-	NeuralNetwork::NeuralNetwork(int* layers, LayerType* layer_types, ActivationFunction* activation_functions, int num_of_inputs, LossFunction loss_function) {
+	NeuralNetwork::NeuralNetwork(std::vector<int> layers, std::vector<LayerType> layer_types, std::vector<ActivationFunction> activation_functions, int num_of_inputs, LossFunction loss_function) {
 		if (sizeof(layers) != sizeof(layer_types)) throw std::invalid_argument("layers array must be the same size as layer_types array. layers:" + std::to_string(sizeof(layers)) + " layer_types:" + std::to_string(sizeof(layer_types)));
 		if (sizeof(layers) != sizeof(activation_functions)) throw std::invalid_argument("layers array must be the same size as activation_functions array. layers:" + std::to_string(sizeof(layers)) + " activation_functions:" + std::to_string(sizeof(activation_functions)));
 		switch (layer_types[0]) {
 			case LayerType::ANN:
 				this->layers = new ANNLayer(num_of_inputs, layers[0], activation_functions[0]);
 		}
-		for (int i = 1; i < sizeof(layers); i++) {
+		for (int i = 1; i < layers.size(); i++) {
 			this->layers->addLayer(layers[i], activation_functions[i], layer_types[i]);
 		}
 		function = loss_function;
