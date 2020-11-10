@@ -340,3 +340,4 @@ ASALocalRun/
 healthchecksdb
 /Machine_Learning_Console/resources/networks/test1.csv
 /Machine_Learning_Console/resources/networks/test5.csv
+/Machine_Learning_Console/resources/datasets/mnist_10.csv

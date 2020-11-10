@@ -6,6 +6,7 @@
 #include "DatasetList.h"
 #include "Dataset.h"
 #include "NetworkList.h"
+#include "Math/Vector.h"
 #include "NeuralNetworks/Enums.h"
 #include "NeuralNetworks/NeuralNetwork.h"
 
@@ -419,7 +420,36 @@ int main() {
 				}
 			}
 			else if (command[0]._Equal("test_network")) {
-				cout << 20 << endl;
+				if (command.size() != 4) cout << "wrong syntax! correct syntax for \"test_network\" command is 'test_network <network name> <dataset name> <target result miss>" << endl;
+				else {
+					NeuralNetwork::NeuralNetwork network = networks.getNetwork(command[1]);
+					Dataset dataset;
+					datasets.getDataset(command[2], dataset);
+					float max_miss = std::stof(command[3]);
+					cout << "network test started" << endl;
+					vector<vector<float>> inputs_vector = vector<vector<float>>();
+					vector<vector<float>> target_results_vector = vector<vector<float>>();
+					dataset.getAllData(inputs_vector, target_results_vector);
+					float avgMiss = 0;
+					int success_counter = 0;
+					for (int i = 0; i < inputs_vector.size(); i++) {
+						float* inputs = new float[inputs_vector[i].size()];
+						float* target_results = new float[target_results_vector[i].size()];
+						cout << "i:" << i << endl;
+						for (int j = 0; j < inputs_vector[i].size(); j++) inputs[j] = inputs_vector[i][j];
+						for (int j = 0; j < target_results_vector[i].size(); j++) target_results[j] = target_results_vector[i][j];
+						float* miss = Math::Vector::Sub(target_results, network.feedForward(inputs));
+						for (int j = 0; j < target_results_vector[i].size(); j++) {
+							if (miss[j] < 0) miss[j] *= -1;
+							if (miss[j] < max_miss) success_counter++;
+							avgMiss += miss[j];
+						}
+						delete[] miss;
+						delete[] inputs;
+						delete[] target_results;
+					}
+					cout << "AvgMiss: " + std::to_string(avgMiss / (target_results_vector.size() * target_results_vector[0].size())) + "	corrects: " + std::to_string(success_counter) + "/" + std::to_string(target_results_vector.size() * target_results_vector[0].size()) << endl;
+				}
 			}
 			else if (command[0]._Equal("train_network")) {
 				cout << 21 << endl;
@@ -428,7 +458,7 @@ int main() {
 				cout << 22 << endl;
 			}
 			else {
-				cout << 23 << endl;
+				cout << command[0] + " is not a recognized command" << endl;
 			}
 		}
 		catch (exception& e) {
