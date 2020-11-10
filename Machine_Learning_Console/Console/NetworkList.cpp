@@ -23,6 +23,7 @@ bool NetworkList::removeNetwork(std::string name) {
 }
 void NetworkList::removeAll() {
 	networks.clear();
+	names.clear();
 	length = 0;
 }
 
@@ -36,7 +37,7 @@ bool NetworkList::renameNetwork(std::string old_name, std::string new_name) {
 	return true;
 }
 int NetworkList::getNetworkIndex(std::string name) {
-	int i = 0;
+	unsigned int i = 0;
 	while (i < names.size() && !name._Equal(names[i])) i++;
 	if (i < names.size()) return i;
 	return -1;

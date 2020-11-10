@@ -15,7 +15,8 @@ namespace NeuralNetwork {
 
 		public:
 			ANNLayer(int num_of_inputs, int size, ActivationFunction function);
-			ANNLayer(float** weights, float* biases, ActivationFunction function);
+			ANNLayer(std::vector<std::vector<float>> weights, std::vector<float> biases, ActivationFunction function);
+			~ANNLayer();
 			float* feedForward(float* inputs) override;
 
 			float* backPropagate(float* inputs, float* target_results, LossFunction loss_function, float rate_of_change) override;

@@ -12,6 +12,8 @@ namespace NeuralNetwork {
 			Layer* next;
 			ActivationFunction function;
 			int num_of_outputs;
+			int num_of_inputs;
+			static std::string split(std::string& string, std::string token);
 		public:
 			static Layer* createLayer(std::string s);
 			void addLayer(int size, ActivationFunction function, LayerType type);

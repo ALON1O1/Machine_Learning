@@ -1,24 +1,30 @@
 #include "Layer.h"
 #include "ANNLayer.h"
 #include <stdexcept>
+#include <vector>
 
 namespace NeuralNetwork {
 	Layer* Layer::createLayer(std::string s) {
+		//std::cout << s << std::endl;
 		LayerType type = enumOperations::getLayerType(split(s, ","));
 		ActivationFunction function = enumOperations::getActivationFunction(split(s, ","));
 		switch (type)
 		{
 			case NeuralNetwork::LayerType::ANN:
-				float** weights = new float*[std::stoi(split(s, ","))];
-				float* biases = new float[sizeof(weights)];
-				for (int i = 0; i < sizeof(biases); i++) {
-					biases[i] = std::stof(split(s, ","));
-					weights[i] = new float[std::stoi(split(s, ","))];
-					for (int j = 0; j < sizeof(weights[i]); j++) {
-						weights[i][j] = std::stof(split(s, ","));
+			{
+				std::vector<std::vector<float>> weights = std::vector<std::vector<float>>();
+				std::vector<float> biases = std::vector<float>();
+				int size = std::stoi(split(s, ","));
+				for (int i = 0; i < size; i++) {
+					biases.push_back(std::stof(split(s, ",")));
+					weights.push_back(std::vector<float>());
+					int inputs = std::stoi(split(s, ","));
+					for (int j = 0; j < inputs; j++) {
+						weights[i].push_back(std::stof(split(s, ",")));
 					}
 				}
 				return new ANNLayer(weights, biases, function);
+			}
 			default:
 				break;
 		}
@@ -34,35 +40,38 @@ namespace NeuralNetwork {
 	}
 	void Layer::addLayer(std::string s) {
 		if (next == NULL) {
+			//std::cout << s << std::endl;
 			LayerType type = enumOperations::getLayerType(split(s, ","));
 			ActivationFunction function = enumOperations::getActivationFunction(split(s, ","));
-			float** weights;
-			float* biases;
 			switch (type)
 			{
-				biases = new float[std::stoi(split(s, ","))];
-				weights = new float* [sizeof(biases)];
-				for (int i = 0; i < sizeof(biases); i++) {
-					biases[i] = std::stof(split(s, ","));
-					weights[i] = new float[std::stoi(split(s, ","))];
-					for (int j = 0 ; j < sizeof(weights[i]) ; j++) {
-						weights[i][j] = std::stof(split(s, ","));
+				case LayerType::ANN: {
+					std::vector<std::vector<float>> weights = std::vector<std::vector<float>>();
+					std::vector<float> biases = std::vector<float>();
+					int size = std::stoi(split(s, ","));
+					for (int i = 0; i < size; i++) {
+						biases.push_back(std::stof(split(s, ",")));
+						weights.push_back(std::vector<float>());
+						int inputs = std::stoi(split(s, ","));
+						for (int j = 0; j < inputs; j++) {
+							weights[i].push_back(std::stof(split(s, ",")));
+						}
 					}
+					next = new ANNLayer(weights, biases, function);
+					break;
 				}
-				next = new ANNLayer(weights, biases, function);
-				break;
-			default:
-				break;
+				default:
+					break;
 			}
 		}
 		else next->addLayer(s);
 	}
 
-	std::string split(std::string& string, std::string token) {
-		int index = string.find_first_of(",");
-		if (index == -1) throw std::invalid_argument("string syntax error!");
+	std::string Layer::split(std::string& string, std::string token) {
+		int index = string.find_first_of(token);
+		if (index == -1) index = string.size();
 		std::string return_value = string.substr(0, index);
-		string.erase(0, index + 1);
+		string.erase(0, index + token.size());
 		return return_value;
 	}
 }

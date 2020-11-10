@@ -130,7 +130,7 @@ int main() {
 				else {
 					ifstream datasetFile;
 					datasetFile.open(dataset_path + command[1] + ".csv", ios::in);
-					if (!datasetFile.good()) cout << "file \"" << command[1] << "\" could not be found" << endl;
+					if (!datasetFile.good()) cout << "dataset \"" << command[1] << "\" could not be found" << endl;
 					else {
 						string line;
 						Dataset dataset;
@@ -223,7 +223,20 @@ int main() {
 				cout << 14 << endl;
 			}
 			else if (command[0]._Equal("load_network")) {
-				cout << 15 << endl;
+				if (command.size() != 2) cout << "wrong syntax! correct syntax for \"load_network\" is 'load_network <network name>" << endl;
+				else {
+					ifstream networkFile;
+					networkFile.open(networks_path + command[1] + ".csv", ios::in);
+					if (!networkFile.good()) cout << "network \"" << command[1] << "\" could not be found" << endl;
+					else {
+						string network_string;
+						string line;
+						getline(networkFile, network_string);
+						while (getline(networkFile, line)) network_string += "\n" + line;
+						if (networks.addNetwork(NeuralNetwork::NeuralNetwork(network_string), command[1])) cout << "network '" + command[1] + "' was successfully loaded" << endl;
+						else cout << "network could not be added, there is already a network named '" + command[1] + "'" << endl;
+					}
+				}
 			}
 			else if (command[0]._Equal("save_network")) {
 				cout << 16 << endl;

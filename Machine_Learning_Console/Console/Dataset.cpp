@@ -24,13 +24,13 @@ void Dataset::getAllData(std::vector<std::vector<float>>& return_inputs, std::ve
 			return_results = results;
 		}
 void Dataset::getSaveString(std::vector<std::string>& saveString) {
-			for (int i = 0; i < inputs.size() ; i++) {
+			for (unsigned int i = 0; i < inputs.size() ; i++) {
 				std::string s = std::to_string(inputs[i].size());
-				for (int j = 0; j < inputs[i].size(); j++) {
+				for (unsigned int j = 0; j < inputs[i].size(); j++) {
 					s += "," + std::to_string(inputs[i][j]);
 				}
 				s += "," + std::to_string(results[i].size());
-				for (int j = 0; j < results[i].size(); j++) {
+				for (unsigned int j = 0; j < results[i].size(); j++) {
 					s += "," + std::to_string(inputs[i][j]);
 				}
 				saveString.push_back(s);

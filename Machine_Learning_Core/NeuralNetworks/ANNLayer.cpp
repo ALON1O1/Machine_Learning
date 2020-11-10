@@ -9,10 +9,11 @@ namespace NeuralNetwork {
 
 	ANNLayer::ANNLayer(int num_of_inputs, int size, ActivationFunction function) {
 		this->function = function;
-		weights = new float* [size];
+		weights = new float*[size];
 		biases = new float[size];
 		next = NULL;
 		num_of_outputs = size;
+		this->num_of_inputs = num_of_inputs;
 
 		for (int i = 0; i < size; i++) {
 			weights[i] = new float[num_of_inputs];
@@ -22,10 +23,23 @@ namespace NeuralNetwork {
 			}
 		}
 	}
-	ANNLayer::ANNLayer(float** weights, float* biases, ActivationFunction function) {
-		this->weights = weights;
-		this->biases = biases;
+	ANNLayer::ANNLayer(std::vector<std::vector<float>> weights, std::vector<float> biases, ActivationFunction function) {
+		this->weights = new float*[weights.size()];
+		this->biases = new float[biases.size()];
+		num_of_outputs = weights.size();
+		num_of_inputs = weights[0].size();
+		for (int i = 0; i < num_of_outputs; i++) {
+			this->weights[i] = new float[weights[i].size()];
+			for (int j = 0; j < num_of_inputs; j++) {
+				this->weights[i][j] = weights[i][j];
+			}
+		}
 		this->function = function;
+	}
+	ANNLayer::~ANNLayer() {
+		delete[] weights;
+		delete[] biases;
+		delete[] next;
 	}
 
 	float ANNLayer::deriveLoss(float err, LossFunction function) {
@@ -41,7 +55,7 @@ namespace NeuralNetwork {
 				const int size = sizeof(values);
 				static float return_values[size];
 				for (int i = 0; i < size; i++) {
-					return_values[i] = 1 / (1 + powf(M_E, -values[i]));
+					return_values[i] = 1 / (1 + powf((float)M_E, -values[i]));
 				}
 				return return_values;
 				
@@ -51,7 +65,7 @@ namespace NeuralNetwork {
 				static float return_values[size];
 				float counter = 0;
 				for (int i = 0; i < size; i++) {
-					return_values[i] = powf(M_E, values[i]);
+					return_values[i] = powf((float)M_E, values[i]);
 					counter += return_values[i];
 				}
 				for (int i = 0; i < size; i++) {
@@ -69,7 +83,7 @@ namespace NeuralNetwork {
 			case ActivationFunction::identity: for (int i = 0; i < size; i++) return_values[i] = 1; return return_values;
 			case ActivationFunction::sigmoid:
 				for (int i = 0; i < size; i++) {
-					float sigmoid = 1 / (1 + powf(M_E, values[i]));
+					float sigmoid = 1 / (1 + powf((float)M_E, values[i]));
 					return_values[i] = sigmoid * (1 - sigmoid);
 				}
 				return return_values;
@@ -155,21 +169,23 @@ namespace NeuralNetwork {
 
 	std::string ANNLayer::toString() {
 		std::string s = "Layer Type: ANN\nActivation Function: " + enumOperations::getName(function) +"\n";
-		for (int i = 0; i < sizeof(weights); i++) {
+		for (int i = 0; i < num_of_outputs; i++) {
 			s += "neuron number:" + std::to_string(i) + "\nbias:" + std::to_string(biases[i]) + "\n";
-			for (int j = 0; j < sizeof(weights[j]); j++) {
+			for (int j = 0; j < num_of_inputs ; j++) {
 				s += "weight " + std::to_string(j) + ": " + std::to_string(weights[i][j]) + ",	";
 			}
 			s += "\n";
 		}
-		if (next != NULL) s += "\n" + next->toString();
+		if (next != NULL) {
+			s += "\n" + next->toString();
+		}
 		return s;
 	}
 	std::string ANNLayer::saveString() {
-		std::string s = "ANN," + enumOperations::getName(function) + "," + std::to_string(sizeof(weights));
-		for (int i = 0; i < sizeof(weights); i++) {
-			s += "," + std::to_string(biases[i]) + "," + std::to_string(sizeof(weights[i]));
-			for (int j = 0; j < sizeof(weights[i]); j++) {
+		std::string s = "ANN," + enumOperations::getName(function) + "," + std::to_string(num_of_outputs);
+		for (int i = 0; i < num_of_outputs; i++) {
+			s += "," + std::to_string(biases[i]) + "," + std::to_string(num_of_inputs);
+			for (int j = 0; j < num_of_inputs; j++) {
 				s += "," + std::to_string(weights[i][j]);
 			}
 		}

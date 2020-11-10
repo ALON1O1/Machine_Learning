@@ -2,6 +2,7 @@
 #include "ANNLayer.h"
 #include <stdexcept>
 #include "Enums.h"
+#include <iostream>
 
 namespace NeuralNetwork {
 	NeuralNetwork::NeuralNetwork(int* layers, LayerType* layer_types, ActivationFunction* activation_functions, int num_of_inputs, LossFunction loss_function) {
@@ -15,6 +16,14 @@ namespace NeuralNetwork {
 			this->layers->addLayer(layers[i], activation_functions[i], layer_types[i]);
 		}
 		function = loss_function;
+	}
+	NeuralNetwork::NeuralNetwork(std::string s) {
+		function = enumOperations::getLossFunction(split(s, "\n"));
+		layers = Layer::createLayer(split(s, "\n"));
+		while (!s.empty()) {
+			layers->addLayer(split(s, "\n"));
+
+		}
 	}
 
 	float* NeuralNetwork::feedForward(float* inputs) {
@@ -83,5 +92,13 @@ namespace NeuralNetwork {
 		}
 		default: throw std::invalid_argument("activation function could not be recognized");
 		}
+	}
+
+	std::string NeuralNetwork::split(std::string& string, std::string token) {
+		int index = string.find_first_of(token);
+		if (index == -1) index = string.size();
+		std::string return_value = string.substr(0, index);
+		string.erase(0, index + token.size());
+		return return_value;
 	}
 }

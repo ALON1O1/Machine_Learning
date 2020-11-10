@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 namespace NeuralNetwork {
-	std::string getName(ActivationFunction function) {
+	std::string enumOperations::getName(ActivationFunction function) {
 		switch (function)
 		{
 			case NeuralNetwork::ActivationFunction::identity: return "identity";
@@ -11,14 +11,14 @@ namespace NeuralNetwork {
 			default: throw std::invalid_argument("activation function could not be recognized");
 		}
 	}
-	std::string getName(LossFunction function) {
+	std::string enumOperations::getName(LossFunction function) {
 		switch (function)
 		{
 			case NeuralNetwork::LossFunction::quadratic: return "quadratic";
 			default: throw std::invalid_argument("activation function could not be recognized");
 		}
 	}
-	std::string getName(LayerType type) {
+	std::string enumOperations::getName(LayerType type) {
 		switch (type)
 		{
 			case NeuralNetwork::LayerType::ANN: return "ANN";
@@ -26,18 +26,18 @@ namespace NeuralNetwork {
 		}
 	}
 
-	ActivationFunction getActivationFunction(std::string function) {
+	ActivationFunction enumOperations::getActivationFunction(std::string function) {
 		if (function._Equal("identity")) return ActivationFunction::identity;
 		if (function._Equal("sigmoid")) return ActivationFunction::sigmoid;
 		if (function._Equal("softmax")) return ActivationFunction::softmax;
-		throw std::invalid_argument("activation function could not be recognized");
+		throw std::invalid_argument("activation function could not be recognized: " + function);
 	}
-	LossFunction getLossFunction(std::string function) {
+	LossFunction enumOperations::getLossFunction(std::string function) {
 		if (function._Equal("quadratic")) return LossFunction::quadratic;
-		throw std::invalid_argument("activation function could not be recognized");
+		throw std::invalid_argument("loss function could not be recognized:" + function);
 	}
-	LayerType getLayerType(std::string type) {
+	LayerType enumOperations::getLayerType(std::string type) {
 		if (type._Equal("ANN")) return LayerType::ANN;
-		throw std::invalid_argument("activation function could not be recognized");
+		throw std::invalid_argument("layer type could not be recognized: " + type);
 	}
 }
