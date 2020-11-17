@@ -46,7 +46,7 @@ namespace NeuralNetwork {
 
 	std::vector<float> ANNLayer::deriveLoss(std::vector<float> err, LossFunction function) {
 		switch (function) {
-			case LossFunction::quadratic: return Math::Vector::MulCross(err, err);
+			case LossFunction::quadratic: return Math::Vector::Mul(err, 2);
 			default: throw std::invalid_argument("could not recognize loss function");
 		}
 	}
@@ -55,10 +55,7 @@ namespace NeuralNetwork {
 			case ActivationFunction::identity: return values;
 			case ActivationFunction::sigmoid: {
 				std::vector<float> return_values = std::vector<float>();
-				for (int i = 0; i < values.size(); i++) {
-					return_values.push_back(1 / (1 + pow(M_E, -values[i])));
-					//std::cout << return_values[i] << std::endl;
-				}
+				for (float i : values) return_values.push_back(1 / (1 + powf((float)M_E, -i)));
 				return return_values;
 				
 			}
@@ -66,7 +63,7 @@ namespace NeuralNetwork {
 				std::vector<float> return_values = std::vector<float>();
 				float counter = 0;
 				for (unsigned int i = 0; i < values.size() ; i++) {
-					return_values.push_back(powf((float)M_E, values[i]));
+					return_values.push_back((float)pow(M_E, values[i]));
 					counter += return_values[i];
 				}
 				for (unsigned int i = 0; i < return_values.size(); i++) {
@@ -83,7 +80,8 @@ namespace NeuralNetwork {
 			case ActivationFunction::identity: for (unsigned int i = 0; i < values.size(); i++) return_values.push_back(1); return return_values;
 			case ActivationFunction::sigmoid:
 				for (float i : values) {
-					float sigmoid = 1 / (1 + powf((float)M_E, i));
+					
+					float sigmoid = (float)(1 / (1 + pow(M_E, -i)));
 					return_values.push_back(sigmoid * (1 - sigmoid));
 				}
 				return return_values;
@@ -140,20 +138,19 @@ namespace NeuralNetwork {
 		else err = Math::Matrix::Sub(target_results, results);
 
 		std::vector<std::vector<float>> weight_changes = std::vector<std::vector<float>>();
-		std::vector<float> bias_changes = Math::Vector::Mul(Math::Vector::MulCross(derive(raw_values[0]), deriveLoss(err[0], loss_function)), rate_of_change);
+		std::vector<float> bias_changes = Math::Vector::Mul(Math::Vector::MulCross(derive(raw_values[0]), deriveLoss(err[0], loss_function)), -rate_of_change / (float)inputs.size());
 
 		for (float i : bias_changes) weight_changes.push_back(Math::Vector::Mul(inputs[0], i));
-
 		for (unsigned int i = 1; i < err.size(); i++) {
-			std::vector<float> bc = Math::Vector::Mul(Math::Vector::MulCross(derive(raw_values[i]), deriveLoss(err[i], loss_function)), rate_of_change);
+			std::vector<float> bc = Math::Vector::Mul(Math::Vector::MulCross(derive(raw_values[i]), deriveLoss(err[i], loss_function)), -rate_of_change / (float)inputs.size());
 			for (float j : bc) weight_changes[i] = Math::Vector::Add(weight_changes[i], Math::Vector::Mul(inputs[i], j));
 			bias_changes = Math::Vector::Add(bias_changes, bc);
 		}
-		
-		err = Math::Matrix::MulDot(weights, err);
 
-		weights = Math::Matrix::Sub(weights, Math::Matrix::Div(weight_changes, (float)weight_changes.size()));
-		biases = Math::Vector::Sub(biases, Math::Vector::Div(bias_changes, (float)bias_changes.size()));
+		err = Math::Matrix::MulDot(err, weights);
+
+		weights = Math::Matrix::Sub(weights, weight_changes);
+		biases = Math::Vector::Sub(biases, bias_changes);
 
 		return err;
 	}

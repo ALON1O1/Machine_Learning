@@ -78,13 +78,10 @@ namespace NeuralNetwork {
 		{
 		case LossFunction::quadratic: {
 			float cost = 0;
-			for (unsigned int i = 0; i < sizeof(inputs); i++) {
-				std::vector<float> results = feedForward(inputs[i]);
-				for (unsigned int j = 0; j < results.size(); j++) {
-					cost += (results[j] - target_results[i][j]) * (results[j] - target_results[i][j]);
-				}
+			for (unsigned int i = 0; i < inputs.size(); i++) {
+				cost += getCost(inputs[i], target_results[i]);
 			}
-			return cost / sizeof(inputs);
+			return cost / inputs.size();
 		}
 		default: throw std::invalid_argument("activation function could not be recognized");
 		}

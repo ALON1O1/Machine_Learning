@@ -41,7 +41,7 @@ namespace Math {
 	}
 	std::vector<std::vector<float>> Matrix::MulDot(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2) {
 		std::vector<std::vector<float>> temp = Transpose(mat2);
-		if (mat1.size() != temp.size()) throw new std::invalid_argument("MulDot: mat1 size is different that mat2 size! mat1:" + std::to_string(mat1.size()) + " , mat2:" + std::to_string(temp.size()));
+		if (mat1[0].size() != mat2.size()) throw new std::invalid_argument("MulDot: mat1 size is different that mat2 size! mat1:" + std::to_string(mat1.size()) + " , mat2:" + std::to_string(mat2.size()));
 		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
 		for (int i = 0; i < mat1.size(); i++) {
 			new_mat.push_back(std::vector<float>());

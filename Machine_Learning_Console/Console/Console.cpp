@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <chrono>
 
 #include "DatasetList.h"
 #include "Dataset.h"
@@ -448,7 +449,28 @@ int main() {
 				}
 			}
 			else if (command[0]._Equal("train_network")) {
-				cout << 21 << endl;
+				if (command.size() != 6) cout << "wrong syntax! correct syntax for \"train_network\" command is 'train_network <network name> <dataset name> <rate of change> <batch size> <number of repetitions>" << endl;
+				else {
+					NeuralNetwork::NeuralNetwork network = networks.getNetwork(command[1]);
+					Dataset dataset;
+					datasets.getDataset(command[2], dataset);
+					float rate_of_change = stof(command[3]);
+					unsigned int batch_size = stoi(command[4]);
+					unsigned int repeats = stoi(command[5]);
+					cout << "network training started" << endl;
+					vector<vector<float>> inputs;
+					vector<vector<float>> target_results;
+					dataset.getAllData(inputs, target_results);
+					float start_cost = network.getAverageCost(inputs, target_results);
+					for (unsigned int i = 0; i < repeats; i++) {
+						auto start_time = std::chrono::high_resolution_clock::now();
+						network.stochasticBackPropagation(inputs, target_results, rate_of_change, batch_size);
+						auto end_time = std::chrono::high_resolution_clock::now();
+						cout << i + 1 << "/" << repeats << "	" << chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count() / 1000000000.0 << "s" << endl;
+					}
+					cout << "start cost:" << start_cost << "	end cost:" << network.getAverageCost(inputs, target_results) << endl;
+					cout << "network training ended" << endl;
+				}
 			}
 			else if (command[0]._Equal("show_results")) {
 				if (command.size() != 4) throw std::invalid_argument("wrong syntax! correct syntax for \"show_results\" command is 'show_results <network name> <dataset name> <data sample index>");
