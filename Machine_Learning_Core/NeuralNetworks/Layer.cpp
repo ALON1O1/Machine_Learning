@@ -5,7 +5,6 @@
 
 namespace NeuralNetwork {
 	Layer* Layer::createLayer(std::string s) {
-		//std::cout << s << std::endl;
 		LayerType type = enumOperations::getLayerType(split(s, ","));
 		ActivationFunction function = enumOperations::getActivationFunction(split(s, ","));
 		switch (type)

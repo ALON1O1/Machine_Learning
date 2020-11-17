@@ -1,26 +1,27 @@
 #pragma once
 #include "Layer.h"
+#include <vector>
 
 namespace NeuralNetwork {
 	class ANNLayer: public Layer
 	{
 		private:
 			ActivationFunction function;
-			float** weights;
-			float* biases;
+			std::vector<std::vector<float>> weights;
+			std::vector<float> biases;
 
-			float deriveLoss(float err, LossFunction function);
-			float* activate(float* values);
-			float* derive(float* values);
+			std::vector<float> deriveLoss(std::vector<float>, LossFunction);
+			std::vector<float> activate(std::vector<float>);
+			std::vector<float> derive(std::vector<float>);
 
 		public:
-			ANNLayer(int num_of_inputs, int size, ActivationFunction function);
-			ANNLayer(std::vector<std::vector<float>> weights, std::vector<float> biases, ActivationFunction function);
+			ANNLayer(int, int, ActivationFunction);
+			ANNLayer(std::vector<std::vector<float>>, std::vector<float>, ActivationFunction);
 			~ANNLayer();
-			float* feedForward(float* inputs) override;
+			std::vector<float> feedForward(std::vector<float>) override;
 
-			float* backPropagate(float* inputs, float* target_results, LossFunction loss_function, float rate_of_change) override;
-			float** stochasticBackPropagation(float** inputs, float** target_results, LossFunction loss_function, float rate_of_change) override;
+			std::vector<float> backPropagate(std::vector<float>, std::vector<float>, LossFunction, float) override;
+			std::vector< std::vector<float>> stochasticBackPropagation(std::vector<std::vector<float>>, std::vector< std::vector<float>>, LossFunction, float) override;
 			
 			std::string saveString() override;
 			std::string toString();

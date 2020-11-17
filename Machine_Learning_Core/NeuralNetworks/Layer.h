@@ -13,14 +13,14 @@ namespace NeuralNetwork {
 			ActivationFunction function;
 			int num_of_outputs;
 			int num_of_inputs;
-			static std::string split(std::string& string, std::string token);
+			static std::string split(std::string&, std::string);
 		public:
-			static Layer* createLayer(std::string s);
-			void addLayer(int size, ActivationFunction function, LayerType type);
-			void addLayer(std::string s);
-			virtual float* feedForward(float* inputs) = 0;
-			virtual float* backPropagate(float* inputs, float* target_results, LossFunction loss_function, float rate_of_change) = 0;
-			virtual float** stochasticBackPropagation(float** inputs, float** target_results, LossFunction loss_function, float rate_of_change) = 0;
+			static Layer* createLayer(std::string);
+			void addLayer(int size, ActivationFunction, LayerType);
+			void addLayer(std::string);
+			virtual std::vector<float> feedForward(std::vector<float>) = 0;
+			virtual std::vector<float> backPropagate(std::vector<float>, std::vector<float>, LossFunction, float) = 0;
+			virtual std::vector< std::vector<float>> stochasticBackPropagation(std::vector< std::vector<float>>, std::vector< std::vector<float>>, LossFunction, float) = 0;
 			virtual std::string saveString() = 0;
 			virtual std::string toString() = 0;
 
