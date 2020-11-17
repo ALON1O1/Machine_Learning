@@ -96,7 +96,7 @@ int main() {
 							if (index == -1) index = line.length();
 							int results_num = stoi(line.substr(0, index));
 							line.erase(0, index + 1);
-							while (line.length() > 0 && inputs_num > 0) {
+							while (line.length() > 0 && results_num > 0) {
 								index = line.find(",", 0);
 								if (index == -1) index = line.length();
 								results.push_back(stof(line.substr(0, index)));
@@ -154,7 +154,7 @@ int main() {
 							if (index == -1) index = line.length();
 							int results_num = stoi(line.substr(0, index));
 							line.erase(0, index + 1);
-							while (line.length() > 0 && inputs_num > 0) {
+							while (line.length() > 0 && results_num > 0) {
 								index = line.find(",", 0);
 								if (index == -1) index = line.length();
 								results.push_back(stof(line.substr(0, index)));
@@ -303,7 +303,7 @@ int main() {
 						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create show_layer_data\" is 'show_layer_data <layer index>" << endl;
 						else {
 							int index = std::stoi(create_command[1]);
-							if (index < 0 || index >= sizes.size()) cout << "index must not be negative and must be smaller than the current number of layers" << endl;
+							if (index < 0 || (unsigned)index >= sizes.size()) cout << "index must not be negative and must be smaller than the current number of layers" << endl;
 							else {
 								cout << "Layer Type: " + NeuralNetwork::enumOperations::getName(layer_types[index]) << endl;
 								cout << "Activation Function: " + NeuralNetwork::enumOperations::getName(activation_functions[index]) << endl;
@@ -319,7 +319,7 @@ int main() {
 					else if (create_command[0]._Equal("remove_layer")) {
 						if (create_command.size() != 2) cout << "wrong syntax! correct syntax for \"create remove_layer\" command is 'remove_layer <layer index>'" << endl;
 						int index = std::stoi(create_command[1]);
-						if (index < 0 || index >= sizes.size()) cout << "index must not be negative and must be smaller than the current number of layers" << endl;
+						if (index < 0 || (unsigned)index >= sizes.size()) cout << "index must not be negative and must be smaller than the current number of layers" << endl;
 						else {
 							sizes.erase(sizes.begin() + index);
 							layer_types.erase(layer_types.begin() + index);
@@ -377,7 +377,7 @@ int main() {
 						if (create_command.size() != 3) cout << "wrong syntax! correct syntax for \"create edit_layer\" command is 'edit_layer <layer index> <new layer type>'" << endl;
 						else {
 							int index = std::stoi(create_command[1]);
-							if (index < 0 || index >= sizes.size())  cout << "index must not be negative and must be smaller than the current number of layers" << endl;
+							if (index < 0 || (unsigned)index >= sizes.size())  cout << "index must not be negative and must be smaller than the current number of layers" << endl;
 							else {
 								switch (NeuralNetwork::enumOperations::getLayerType(create_command[2]))
 								{
@@ -427,28 +427,24 @@ int main() {
 					datasets.getDataset(command[2], dataset);
 					float max_miss = std::stof(command[3]);
 					cout << "network test started" << endl;
-					vector<vector<float>> inputs_vector = vector<vector<float>>();
-					vector<vector<float>> target_results_vector = vector<vector<float>>();
-					dataset.getAllData(inputs_vector, target_results_vector);
+					vector<vector<float>> inputs = vector<vector<float>>();
+					vector<vector<float>> target_results = vector<vector<float>>();
+					dataset.getAllData(inputs, target_results);
 					float avgMiss = 0;
 					int success_counter = 0;
-					for (int i = 0; i < inputs_vector.size(); i++) {
-						float* inputs = new float[inputs_vector[i].size()];
-						float* target_results = new float[target_results_vector[i].size()];
-						cout << "i:" << i << endl;
-						for (int j = 0; j < inputs_vector[i].size(); j++) inputs[j] = inputs_vector[i][j];
-						for (int j = 0; j < target_results_vector[i].size(); j++) target_results[j] = target_results_vector[i][j];
-						float* miss = Math::Vector::Sub(target_results, network.feedForward(inputs));
-						for (int j = 0; j < target_results_vector[i].size(); j++) {
-							if (miss[j] < 0) miss[j] *= -1;
+					for (unsigned int i = 0; i < inputs.size(); i++) {
+						vector<float> results = network.feedForward(inputs[i]);
+						std::vector<float> miss = Math::Vector::Sub(target_results[i], results);
+						for (unsigned int j = 0; j < target_results[i].size(); j++) {
+							if (miss[j] < 0) miss[j] = -miss[j];
 							if (miss[j] < max_miss) success_counter++;
 							avgMiss += miss[j];
 						}
-						delete[] miss;
-						delete[] inputs;
-						delete[] target_results;
+						miss.~vector();
+						cout << i << "/" << inputs.size() << endl;
 					}
-					cout << "AvgMiss: " + std::to_string(avgMiss / (target_results_vector.size() * target_results_vector[0].size())) + "	corrects: " + std::to_string(success_counter) + "/" + std::to_string(target_results_vector.size() * target_results_vector[0].size()) << endl;
+					cout << "AvgMiss: " + std::to_string(avgMiss / (float)(target_results.size() * target_results[0].size())) + "	corrects: " + std::to_string(success_counter) + "/" + std::to_string(target_results.size() * target_results[0].size()) << endl;
+					cout << "network test has ended" << endl;
 				}
 			}
 			else if (command[0]._Equal("train_network")) {

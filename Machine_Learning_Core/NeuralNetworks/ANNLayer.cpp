@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "..\Math\Vector.h"
 #include "..\Math\Matrix.h"
+#include <iostream>
 
 namespace NeuralNetwork {
 
@@ -54,16 +55,19 @@ namespace NeuralNetwork {
 			case ActivationFunction::identity: return values;
 			case ActivationFunction::sigmoid: {
 				std::vector<float> return_values = std::vector<float>();
-				for (float i : values) return_values.push_back(1 / (1 + powf((float)M_E, -i)));
+				for (int i = 0; i < values.size(); i++) {
+					return_values.push_back(1 / (1 + pow(M_E, -values[i])));
+					//std::cout << return_values[i] << std::endl;
+				}
 				return return_values;
 				
 			}
 			case ActivationFunction::softmax: {
 				std::vector<float> return_values = std::vector<float>();
 				float counter = 0;
-				for (float i : values) {
-					return_values.push_back(powf((float)M_E, i));
-					counter += i;
+				for (unsigned int i = 0; i < values.size() ; i++) {
+					return_values.push_back(powf((float)M_E, values[i]));
+					counter += return_values[i];
 				}
 				for (unsigned int i = 0; i < return_values.size(); i++) {
 					return_values[i] /= counter;

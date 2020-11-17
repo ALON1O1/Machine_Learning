@@ -31,7 +31,7 @@ void Dataset::getSaveString(std::vector<std::string>& saveString) {
 				}
 				s += "," + std::to_string(results[i].size());
 				for (unsigned int j = 0; j < results[i].size(); j++) {
-					s += "," + std::to_string(inputs[i][j]);
+					s += "," + std::to_string(results[i][j]);
 				}
 				saveString.push_back(s);
 			}
