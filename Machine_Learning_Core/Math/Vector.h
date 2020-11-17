@@ -1,19 +1,20 @@
 #pragma once
+#include <vector>
 
 namespace Math {
 	class Vector
 	{
 		public:
-			static float* Add(float*, float, int length);
-			static float* Add(float*, float*, int length);
-			static float* Sub(float*, float, int length);
-			static float* Sub(float*, float*, int length);
-			static float* Mul(float*, float, int length);
-			static float* MulCross(float*, float*, int length);
-			static float MulDot(float*, float*, int length);
-			static float* Div(float*, float, int length);
-			static float* Div(float*, float*, int length);
-			static float Sum(float*, int length);
+			static std::vector<float> Add(std::vector<float>, float);
+			static std::vector<float> Add(std::vector<float>, std::vector<float>);
+			static std::vector<float> Sub(std::vector<float>, float num);
+			static std::vector<float> Sub(std::vector<float>, std::vector<float>);
+			static std::vector<float> Mul(std::vector<float>, float);
+			static std::vector<float> MulCross(std::vector<float>, std::vector<float>);
+			static float MulDot(std::vector<float>, std::vector<float>);
+			static std::vector<float> Div(std::vector<float>, float);
+			static std::vector<float> Div(std::vector<float>, std::vector<float>);
+			static float Sum(std::vector<float>);
 	};
 }
 

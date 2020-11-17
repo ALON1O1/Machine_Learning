@@ -1,21 +1,22 @@
 #pragma once
+#include <vector>
 
 namespace Math {
 
 	class Matrix
 	{
 		public:
-			static float** Add(float** mat, float num, int width, int height);
-			static float** Add(float** mat1, float** mat2, int width, int height);
-			static float** Sub(float** mat, float num, int width, int height);
-			static float** Sub(float** mat1, float** mat2, int width, int height);
-			static float** Mul(float** mat, float num, int width, int height);
-			static float** MulCross(float** mat1, float** mat2, int width, int height);
-			static float** MulDot(float** mat1, float** mat2, int mutual, int height1, int width2);
-			static float* MulDot(float** mat, float* vec, int width, int height);
-			static float** Transpose(float** mat, int width, int height);
-			static float** Div(float** mat, float num, int width, int height);
-			static float** Div(float** mat1, float** mat2, int width, int height);
+			static std::vector<std::vector<float>> Add(std::vector<std::vector<float>> mat, float num);
+			static std::vector<std::vector<float>> Add(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2);
+			static std::vector<std::vector<float>> Sub(std::vector<std::vector<float>> mat, float num);
+			static std::vector<std::vector<float>> Sub(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2);
+			static std::vector<std::vector<float>> Mul(std::vector<std::vector<float>> mat, float num);
+			static std::vector<std::vector<float>> MulCross(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2);
+			static std::vector<std::vector<float>> MulDot(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2);
+			static std::vector<float> MulDot(std::vector<std::vector<float>> mat, std::vector<float> vec);
+			static std::vector<std::vector<float>> Transpose(std::vector<std::vector<float>> mat);
+			static std::vector<std::vector<float>> Div(std::vector<std::vector<float>> mat, float num);
+			static std::vector<std::vector<float>> Div(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2);
 	};
 
 }

@@ -1,113 +1,78 @@
 #include "Matrix.h"
 #include "Vector.h"
+#include <stdexcept>
+#include <string>
 
 namespace Math {
-	float** Matrix::Add(float** mat, float num, int width, int height) {
-		static float** new_mat = new float*[sizeof(mat)];
-		for (int i = 0; i < sizeof(mat); i++) {
-			new_mat[i] = new float[sizeof(mat[i])];
-			for (int j = 0; j < sizeof(mat[i]); i++) {
-				new_mat[i][j] = mat[i][j] + num;
+	std::vector<std::vector<float>> Matrix::Add(std::vector<std::vector<float>> mat, float num) {
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (std::vector<float> i : mat) new_mat.push_back(Vector::Add(i, num));
+		return new_mat;
+	}
+	std::vector<std::vector<float>> Matrix::Add(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2) {
+		if (mat1.size() != mat2.size()) throw new std::invalid_argument("mat1 size is different that mat2 size! mat1:" + std::to_string(mat1.size()) + " , mat2:" + std::to_string(mat2.size()));
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (int i = 0; i < mat1.size(); i++) new_mat.push_back(Vector::Add(mat1[i], mat2[i]));
+		return new_mat;
+	}
+	std::vector<std::vector<float>> Matrix::Sub(std::vector<std::vector<float>> mat, float num) {
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (std::vector<float> i : mat) new_mat.push_back(Vector::Sub(i, num));
+		return new_mat;
+	}
+	std::vector<std::vector<float>> Matrix::Sub(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2) {
+		if (mat1.size() != mat2.size()) throw new std::invalid_argument("mat1 size is different that mat2 size! mat1:" + std::to_string(mat1.size()) + " , mat2:" + std::to_string(mat2.size()));
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (int i = 0; i < mat1.size(); i++) new_mat.push_back(Vector::Sub(mat1[i], mat2[i]));
+		return new_mat;
+	}
+	std::vector<std::vector<float>> Matrix::Mul(std::vector<std::vector<float>> mat, float num) {
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (std::vector<float> i : mat) new_mat.push_back(Vector::Mul(i, num));
+		return new_mat;
+	}
+	std::vector<std::vector<float>> Matrix::MulCross(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2) {
+		if (mat1.size() != mat2.size()) throw new std::invalid_argument("mat1 size is different that mat2 size! mat1:" + std::to_string(mat1.size()) + " , mat2:" + std::to_string(mat2.size()));
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (int i = 0; i < mat1.size(); i++) new_mat.push_back(Vector::MulCross(mat1[i], mat2[i]));
+		return new_mat;
+	}
+	std::vector<std::vector<float>> Matrix::MulDot(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2) {
+		std::vector<std::vector<float>> temp = Transpose(mat2);
+		if (mat1.size() != temp.size()) throw new std::invalid_argument("mat1 size is different that mat2 size! mat1:" + std::to_string(mat1.size()) + " , mat2:" + std::to_string(temp.size()));
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (int i = 0; i < mat1.size(); i++) {
+			new_mat.push_back(std::vector<float>());
+			for (int j = 0; j < temp.size(); j++) {
+				new_mat[i].push_back(Vector::MulDot(mat1[i], temp[j]));
 			}
 		}
 		return new_mat;
 	}
-	float** Matrix::Add(float** mat1, float** mat2, int width, int height) {
-		static float** new_mat = new float* [sizeof(mat1)];
-		for (int i = 0; i < sizeof(mat1); i++) {
-			new_mat[i] = new float[sizeof(mat1[i])];
-			for (int j = 0; j < sizeof(mat1[i]); i++) {
-				new_mat[i][j] = mat1[i][j] + mat2[i][j];
-			}
-		}
-		return new_mat;
-	}
-	float** Matrix::Sub(float** mat, float num, int width, int height) {
-		static float** new_mat = new float* [sizeof(mat)];
-		for (int i = 0; i < sizeof(mat); i++) {
-			new_mat[i] = new float[sizeof(mat[i])];
-			for (int j = 0; j < sizeof(mat[i]); i++) {
-				new_mat[i][j] = mat[i][j] - num;
-			}
-		}
-		return new_mat;
-	}
-	float** Matrix::Sub(float** mat1, float** mat2, int width, int height) {
-		static float** new_mat = new float* [sizeof(mat1)];
-		for (int i = 0; i < sizeof(mat1); i++) {
-			new_mat[i] = new float[sizeof(mat1[i])];
-			for (int j = 0; j < sizeof(mat1[i]); i++) {
-				new_mat[i][j] = mat1[i][j] - mat2[i][j];
-			}
-		}
-		return new_mat;
-	}
-	float** Matrix::Mul(float** mat, float num, int width, int height) {
-		static float** new_mat = new float* [sizeof(mat)];
-		for (int i = 0; i < sizeof(mat); i++) {
-			new_mat[i] = new float[sizeof(mat[i])];
-			for (int j = 0; j < sizeof(mat[i]); i++) {
-				new_mat[i][j] = mat[i][j] * num;
-			}
-		}
-		return new_mat;
-	}
-	float** Matrix::MulCross(float** mat1, float** mat2, int width, int height) {
-		static float** new_mat = new float* [sizeof(mat1)];
-		for (int i = 0; i < sizeof(mat1); i++) {
-			new_mat[i] = new float[sizeof(mat1[i])];
-			for (int j = 0; j < sizeof(mat1[i]); i++) {
-				new_mat[i][j] = mat1[i][j] + mat2[i][j];
-			}
-		}
-		return new_mat;
-	}
-	float** Matrix::MulDot(float** mat1, float** mat2, int mutual, int height1, int width2) {
-		float** temp = Transpose(mat2);
-		float** new_mat = new float* [sizeof(mat1)];
-		for (int i = 0; i < sizeof(new_mat); i++) {
-			new_mat[i] = new float[sizeof(temp)];
-			for (int j = 0; j < sizeof(new_mat[i]); j++) {
-				new_mat[i][j] = Vector::MulDot(mat1[i], temp[j]);
-			}
-		}
-		return new_mat;
-	}
-	float* Matrix::MulDot(float** mat, float* vec, int width, int height) {
-		float* new_vec = new float[sizeof(mat)];
-		for (int i = 0; i < sizeof(new_vec); i++) {
-			new_vec[i] = Vector::MulDot(mat[i], vec);
-		}
+	std::vector<float> Matrix::MulDot(std::vector<std::vector<float>> mat, std::vector<float> vec) {
+		std::vector<float> new_vec = std::vector<float>();
+		for (std::vector<float> i : mat) new_vec.push_back(Vector::MulDot(i, vec));
 		return new_vec;
 	}
-	float** Matrix::Transpose(float** mat, int width, int height) {
-		float** new_mat = new float* [sizeof(mat[0])];
-		for (int i = 0; i < sizeof(new_mat); i++) {
-			new_mat[i] = new float[sizeof(mat)];
-			for (int j = 0; j < sizeof(new_mat[i]); j++) {
-				new_mat[i][j] = mat[j][i];
+	std::vector<std::vector<float>> Matrix::Transpose(std::vector<std::vector<float>> mat) {
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (int i = 0; i < mat[0].size(); i++) {
+			new_mat.push_back(std::vector<float>());
+			for (int j = 0; j < mat.size(); j++) {
+				new_mat[i].push_back(mat[j][i]);
 			}
 		}
 		return new_mat;
 	}
-	float** Matrix::Div(float** mat, float num, int width, int height) {
-		static float** new_mat = new float* [sizeof(mat)];
-		for (int i = 0; i < sizeof(mat); i++) {
-			new_mat[i] = new float[sizeof(mat[i])];
-			for (int j = 0; j < sizeof(mat[i]); i++) {
-				new_mat[i][j] = mat[i][j] / num;
-			}
-		}
+	std::vector<std::vector<float>> Matrix::Div(std::vector<std::vector<float>> mat, float num) {
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (std::vector<float> i : mat) new_mat.push_back(Vector::Div(i, num));
 		return new_mat;
 	}
-	float** Matrix::Div(float** mat1, float** mat2, int width, int height) {
-		static float** new_mat = new float* [sizeof(mat1)];
-		for (int i = 0; i < sizeof(mat1); i++) {
-			new_mat[i] = new float[sizeof(mat1[i])];
-			for (int j = 0; j < sizeof(mat1[i]); i++) {
-				new_mat[i][j] = mat1[i][j] / mat2[i][j];
-			}
-		}
+	std::vector<std::vector<float>> Matrix::Div(std::vector<std::vector<float>> mat1, std::vector<std::vector<float>> mat2) {
+		if (mat1.size() != mat2.size()) throw new std::invalid_argument("mat1 size is different that mat2 size! mat1:" + std::to_string(mat1.size()) + " , mat2:" + std::to_string(mat2.size()));
+		std::vector<std::vector<float>> new_mat = std::vector<std::vector<float>>();
+		for (int i = 0; i < mat1.size(); i++) new_mat.push_back(Vector::Div(mat1[i], mat2[i]));
 		return new_mat;
 	}
 }
