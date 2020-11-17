@@ -15,6 +15,12 @@ void Dataset::addData(std::vector<float> inputs, std::vector<float> results) {
 			this->results.push_back(results);
 			length++;
 		}
+std::vector<float> Dataset::getInputs(int index) {
+	return inputs[index];
+}
+std::vector<float> Dataset::getResults(int index) {
+	return results[index];
+}
 void Dataset::getData(int index, std::vector<float>& return_inputs, std::vector<float>& return_results) {
 			return_inputs = inputs[index];
 			return_results = results[index];

@@ -451,7 +451,22 @@ int main() {
 				cout << 21 << endl;
 			}
 			else if (command[0]._Equal("show_results")) {
-				cout << 22 << endl;
+				if (command.size() != 4) throw std::invalid_argument("wrong syntax! correct syntax for \"show_results\" command is 'show_results <network name> <dataset name> <data sample index>");
+				else {
+					NeuralNetwork::NeuralNetwork network = networks.getNetwork(command[1]);
+					Dataset dataset;
+					datasets.getDataset(command[2], dataset);
+					int index = stoi(command[3]);
+					vector<float> inputs;
+					vector<float> target_results;
+					dataset.getData(index, inputs, target_results);
+					vector<float> results = network.feedForward(inputs);
+					cout << "results" << endl;
+					for (float i : results) cout << i << "	";
+					cout << endl << "target results" << endl;
+					for (float i : target_results) cout << i << "	";
+					cout << endl;
+				}
 			}
 			else {
 				cout << command[0] + " is not a recognized command" << endl;

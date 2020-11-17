@@ -14,6 +14,8 @@ class Dataset
 		Dataset();
 		~Dataset();
 		int getLength();
+		std::vector<float> getInputs(int index);
+		std::vector<float> getResults(int index);
 		void addData(std::vector<float> inputs, std::vector<float> results);
 		void getData(int index, std::vector<float>& return_inputs, std::vector<float>& return_results);
 		void getAllData(std::vector<std::vector<float>>& return_inputs, std::vector<std::vector<float>>& return_results);
